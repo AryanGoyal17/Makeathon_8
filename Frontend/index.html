@@ -16,30 +16,60 @@
             </div>
         </div>
         <div class="nav-controls">
-            <button id="theme-toggle" class="icon-btn" title="Toggle Dark Mode">🌙</button>
-            
-            <select id="lang-toggle" class="lang-select">
+            <select id="lang-toggle" class="lang-select hidden">
                 <option value="en">English</option>
                 <option value="hi">हिंदी (Hindi)</option>
                 <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
                 <option value="ta">தமிழ் (Tamil)</option>
                 <option value="mr">मराठी (Marathi)</option>
             </select>
+            <button id="theme-toggle" class="icon-btn" title="Toggle Dark Mode">🌙</button>
+            <button id="logout-btn" class="nav-btn hidden">Logout</button>
         </div>
     </nav>
 
-    <div class="container">
+    <div id="auth-view" class="auth-container">
+        <div class="panel auth-panel">
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="tab-login">Login</div>
+                <div class="auth-tab" id="tab-signup">Sign Up</div>
+            </div>
+
+            <form id="login-form">
+                <label>Email ID</label>
+                <input type="email" id="login-email" placeholder="student@example.com" required>
+                <label>Password</label>
+                <input type="password" id="login-password" placeholder="••••••••" required>
+                <button type="submit" id="btn-login" class="btn-primary">Login</button>
+            </form>
+
+            <form id="signup-form" class="hidden">
+                <label>Full Name</label>
+                <input type="text" id="signup-name" placeholder="Rahul Sharma" required>
+                <label>Email ID</label>
+                <input type="email" id="signup-email" placeholder="student@example.com" required>
+                <label>Password</label>
+                <input type="password" id="signup-password" placeholder="Create a password" required>
+                <button type="submit" id="btn-signup" class="btn-primary">Create Account</button>
+            </form>
+
+            <div id="auth-message" class="info-box" style="margin-top: 15px; font-weight: 500;"></div>
+        </div>
+    </div>
+
+    <div id="main-view" class="container hidden">
         <aside class="sidebar">
             <div class="panel">
                 <div class="panel-header">
                     <h2 data-i18n="profile_header">Student Profile</h2>
+                    <p id="welcome-message" style="font-size: 0.8rem; color: var(--text-light); margin: 5px 0 0 0;"></p>
                 </div>
                 <form id="evaluation-form">
                     <label data-i18n="label_name">Full Name</label>
                     <input type="text" id="name" placeholder="Rahul Sharma" required>
 
                     <div class="row">
-                        <div>
+                        <div class="input-group">
                             <label data-i18n="label_gender">Gender</label>
                             <select id="gender" class="lang-select full-width-select" required>
                                 <option value="" disabled selected data-i18n="opt_select_gender">Select Gender</option>
@@ -47,7 +77,7 @@
                                 <option value="Female" data-i18n="opt_female">Female</option>
                             </select>
                         </div>
-                        <div>
+                        <div class="input-group">
                             <label data-i18n="label_category">Category</label>
                             <select id="category" class="lang-select full-width-select" required>
                                 <option value="" disabled selected data-i18n="opt_select_category">Select Category</option>
@@ -60,48 +90,23 @@
                     </div>
 
                     <div class="row">
-                        <div>
+                        <div class="input-group">
                             <label data-i18n="label_degree">Degree</label>
                             <select id="degree" class="lang-select full-width-select" required>
                                 <option value="" disabled selected>Select Degree</option>
-                                
                                 <optgroup label="Bachelors">
                                     <option value="B.Tech">B.Tech (Engineering/Technology)</option>
                                     <option value="B.Sc">B.Sc (Science)</option>
                                     <option value="B.A">B.A (Arts/Humanities)</option>
-                                    <option value="B.Com">B.Com (Commerce)</option>
-                                    <option value="BBA">BBA (Business Administration)</option>
                                     <option value="BCA">BCA (Computer Applications)</option>
-                                    <option value="MBBS">MBBS (Medicine)</option>
-                                    <option value="LLB">LLB (Law)</option>
-                                    <option value="B.Des">B.Des (Design)</option>
                                 </optgroup>
-
                                 <optgroup label="Masters">
                                     <option value="M.Tech">M.Tech (Engineering/Technology)</option>
-                                    <option value="M.Sc">M.Sc (Science)</option>
-                                    <option value="M.A">M.A (Arts/Humanities)</option>
-                                    <option value="M.Com">M.Com (Commerce)</option>
-                                    <option value="MBA">MBA (Business/Management)</option>
                                     <option value="MCA">MCA (Computer Applications)</option>
-                                    <option value="LLM">LLM (Law)</option>
-                                    <option value="MD">MD/MS (Medicine)</option>
-                                </optgroup>
-
-                                <optgroup label="Doctoral">
-                                    <option value="PhD_STEM">Ph.D. (Science, Tech, Engineering, Math)</option>
-                                    <option value="PhD_Humanities">Ph.D. (Humanities & Social Sciences)</option>
-                                    <option value="PhD_Management">Ph.D. (Management/Business)</option>
-                                    <option value="PhD_Law">Ph.D. (Law)</option>
-                                </optgroup>
-
-                                <optgroup label="Post-Doctoral">
-                                    <option value="PDF_STEM">Post-Doctoral Fellowship (Science & Tech)</option>
-                                    <option value="PDF_Humanities">Post-Doctoral Fellowship (Humanities & Social Sciences)</option>
                                 </optgroup>
                             </select>
                         </div>
-                        <div>
+                        <div class="input-group">
                             <label data-i18n="label_cgpa">CGPA</label>
                             <input type="number" step="0.1" min="0" max="10" id="cgpa" placeholder="8.5" required>
                         </div>
@@ -116,10 +121,6 @@
                     <button type="submit" id="analyze-btn" class="btn-primary" data-i18n="btn_discover">Discover Opportunities</button>
                 </form>
             </div>
-            
-            <div class="info-box">
-                <p data-i18n="privacy_note">🔒 Your profile data is stored securely and never shared with third parties.</p>
-            </div>
         </aside>
 
         <main class="main-content">
@@ -130,7 +131,7 @@
             </div>
 
             <div id="dynamic-results" class="results-panel hidden">
-                </div>
+            </div>
         </main>
     </div>
 
