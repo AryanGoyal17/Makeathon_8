@@ -1,0 +1,11 @@
+# Node dependencies (Blocks Backend/node_modules)
+node_modules/
+
+# Environment variables (Blocks Backend/.env)
+.env
+
+# NPM Logs
+npm-debug.log*
+
+# Mac OS junk (Always good to have just in case)
+.DS_Store
