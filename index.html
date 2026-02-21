@@ -13,10 +13,11 @@
             <div class="brand-logo">🎓</div>
             <div class="brand-text">
                 <h1>ScholarFlow</h1>
-                <span class="badge">BETA</span>
             </div>
         </div>
         <div class="nav-controls">
+            <button id="theme-toggle" class="icon-btn" title="Toggle Dark Mode">🌙</button>
+            
             <select id="lang-toggle" class="lang-select">
                 <option value="en">English</option>
                 <option value="hi">हिंदी (Hindi)</option>
@@ -40,7 +41,7 @@
                     <div class="row">
                         <div>
                             <label data-i18n="label_degree">Degree</label>
-                            <select id="degree" class="lang-select" style="width: 100%; margin-bottom: 1rem;" required>
+                            <select id="degree" class="lang-select full-width-select" required>
                                 <option value="" disabled selected>Select Degree</option>
                                 
                                 <optgroup label="Bachelors">

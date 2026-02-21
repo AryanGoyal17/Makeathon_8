@@ -1,4 +1,24 @@
-// 1. Define Translation Resources
+// 1. Theme Toggle Logic
+const themeBtn = document.getElementById('theme-toggle');
+const htmlEl = document.documentElement;
+
+const savedTheme = localStorage.getItem('theme') || 'light';
+htmlEl.setAttribute('data-theme', savedTheme);
+updateThemeIcon(savedTheme);
+
+themeBtn.addEventListener('click', () => {
+    const currentTheme = htmlEl.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    htmlEl.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon(newTheme);
+});
+
+function updateThemeIcon(theme) {
+    themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+}
+
+// 2. Define Translation Resources
 const resources = {
     en: {
         translation: {
@@ -97,7 +117,7 @@ const resources = {
     }
 };
 
-// 2. Initialize i18next
+// 3. Initialize i18next
 i18next.init({
     lng: 'en',
     debug: true,
@@ -106,7 +126,7 @@ i18next.init({
     updateContent();
 });
 
-// 3. Language Switcher Logic
+// 4. Language Switcher Logic
 document.getElementById('lang-toggle').addEventListener('change', function(e) {
     i18next.changeLanguage(e.target.value, () => {
         updateContent();
@@ -120,7 +140,7 @@ function updateContent() {
     });
 }
 
-// 4. Form Submission Logic
+// 5. Form Submission Logic
 document.getElementById('evaluation-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('analyze-btn');
@@ -141,7 +161,7 @@ document.getElementById('evaluation-form').addEventListener('submit', async (e) 
     // Simulate API Call for Hackathon Frontend Testing
     await new Promise(r => setTimeout(r, 1200));
 
-    // Mock Logic: If CGPA >= 8.0, show a scholarship match. Otherwise, show internship fallback.
+    // Mock Logic
     const isEligible = payload.student_profile.cgpa >= 8.0;
     renderResults(isEligible);
     
@@ -169,15 +189,15 @@ function renderResults(isEligible) {
         resultsDiv.innerHTML = `
             <div class="status-bar ineligible">✕ ${i18next.t('status_ineligible')}</div>
             <p>Your profile does not currently meet the hard constraints for the top state scholarships.</p>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 1.5rem 0;">
-            <h3 style="color: #c53030;">${i18next.t('fallback_header')}</h3>
-            <div class="proof-section" style="border-left-color: #c53030; background: #fff5f5;">
-                <h4 style="color: #c53030; margin-bottom: 10px;">Junior Frontend Developer at TechCorp</h4>
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
+            <h3 style="color: var(--danger);">${i18next.t('fallback_header')}</h3>
+            <div class="proof-section" style="border-left-color: var(--danger); background: var(--input-bg);">
+                <h4 style="color: var(--danger); margin-bottom: 10px;">Junior Frontend Developer at TechCorp</h4>
                 <p><strong>Match Score:</strong> 82%</p>
                 <p><strong>Gap Analysis:</strong> You possess strong foundational HTML/CSS skills, but the role requires intermediate JavaScript DOM manipulation.</p>
                 <p><strong>Action Plan:</strong> Complete the free 4-hour FreeCodeCamp JS course to bridge this gap.</p>
             </div>
-            <button class="btn-primary" style="background: #c53030; margin-top: 10px;">View Internship Details</button>
+            <button class="btn-primary" style="background: var(--danger); margin-top: 10px;">View Internship Details</button>
         `;
     }
 }
