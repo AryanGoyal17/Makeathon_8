@@ -1,0 +1,134 @@
+:root {
+    --primary-blue: #0056b3;
+    --primary-hover: #004494;
+    --bg-page: #f0f4f8;
+    --bg-panel: #ffffff;
+    --border-color: #d1d9e6;
+    --text-dark: #1a202c;
+    --text-light: #4a5568;
+    --success: #28a745;
+    --danger: #dc3545;
+    --radius: 6px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-dark);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand { display: flex; align-items: center; gap: 12px; }
+.brand-logo { font-size: 1.5rem; }
+.brand-text h1 { font-size: 1.25rem; font-weight: 600; margin: 0; color: var(--primary-blue); }
+.badge { background: #e2e8f0; color: #4a5568; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+
+/* FIX: Increased padding and min-height to prevent tall scripts from cutting off */
+.lang-select { 
+    padding: 0.6rem 0.8rem; 
+    border-radius: 4px; 
+    border: 1px solid var(--border-color); 
+    font-family: 'Inter', sans-serif; 
+    font-size: 0.95rem;
+    line-height: 1.5;
+    min-height: 42px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+/* Layout */
+.container {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+}
+
+@media (max-width: 768px) { .container { grid-template-columns: 1fr; height: auto; } }
+
+/* Panels */
+.panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+}
+
+.panel-header { margin-bottom: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+.panel-header h2 { font-size: 1.1rem; color: var(--text-dark); margin: 0; }
+
+/* Forms */
+label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-light); margin-bottom: 0.4rem; }
+input {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+}
+input:focus, select:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.1); }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.btn-primary {
+    width: 100%;
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-primary:disabled { background: #a0aec0; cursor: not-allowed; }
+
+.info-box { margin-top: 1rem; font-size: 0.8rem; color: #718096; text-align: center; }
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-light);
+    text-align: center;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius);
+    background: #f8fafc;
+}
+.illustration { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+
+/* Dynamic Results */
+.results-panel { background: white; border: 1px solid var(--border-color); border-radius: var(--radius); padding: 2rem; height: 100%; overflow-y: auto; }
+.status-bar { padding: 8px 16px; border-radius: 4px; font-weight: 600; display: inline-block; margin-bottom: 1.5rem; }
+.eligible { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+.ineligible { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+.proof-section { background: #f1f5f9; padding: 1.25rem; border-left: 4px solid var(--primary-blue); margin: 1.5rem 0; }
+.proof-section h4 { margin: 0 0 0.5rem 0; font-size: 0.9rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; }
+.proof-text { font-family: 'Courier New', monospace; font-size: 0.9rem; color: #333; }
+
+.hidden { display: none; }

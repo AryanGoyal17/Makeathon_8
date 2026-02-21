@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScholarFlow | Student Opportunity Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="brand-logo">🎓</div>
+            <div class="brand-text">
+                <h1>ScholarFlow</h1>
+                <span class="badge">BETA</span>
+            </div>
+        </div>
+        <div class="nav-controls">
+            <select id="lang-toggle" class="lang-select">
+                <option value="en">English</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                <option value="ta">தமிழ் (Tamil)</option>
+                <option value="mr">मराठी (Marathi)</option>
+            </select>
+        </div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 data-i18n="profile_header">Student Profile</h2>
+                </div>
+                <form id="evaluation-form">
+                    <label data-i18n="label_name">Full Name</label>
+                    <input type="text" id="name" placeholder="Rahul Sharma" required>
+
+                    <div class="row">
+                        <div>
+                            <label data-i18n="label_degree">Degree</label>
+                            <select id="degree" class="lang-select" style="width: 100%; margin-bottom: 1rem;" required>
+                                <option value="" disabled selected>Select Degree</option>
+                                
+                                <optgroup label="Bachelors">
+                                    <option value="B.Tech">B.Tech (Engineering/Technology)</option>
+                                    <option value="B.Sc">B.Sc (Science)</option>
+                                    <option value="B.A">B.A (Arts/Humanities)</option>
+                                    <option value="B.Com">B.Com (Commerce)</option>
+                                    <option value="BBA">BBA (Business Administration)</option>
+                                    <option value="BCA">BCA (Computer Applications)</option>
+                                    <option value="MBBS">MBBS (Medicine)</option>
+                                    <option value="LLB">LLB (Law)</option>
+                                    <option value="B.Des">B.Des (Design)</option>
+                                </optgroup>
+
+                                <optgroup label="Masters">
+                                    <option value="M.Tech">M.Tech (Engineering/Technology)</option>
+                                    <option value="M.Sc">M.Sc (Science)</option>
+                                    <option value="M.A">M.A (Arts/Humanities)</option>
+                                    <option value="M.Com">M.Com (Commerce)</option>
+                                    <option value="MBA">MBA (Business/Management)</option>
+                                    <option value="MCA">MCA (Computer Applications)</option>
+                                    <option value="LLM">LLM (Law)</option>
+                                    <option value="MD">MD/MS (Medicine)</option>
+                                </optgroup>
+
+                                <optgroup label="Doctoral">
+                                    <option value="PhD_STEM">Ph.D. (Science, Tech, Engineering, Math)</option>
+                                    <option value="PhD_Humanities">Ph.D. (Humanities & Social Sciences)</option>
+                                    <option value="PhD_Management">Ph.D. (Management/Business)</option>
+                                    <option value="PhD_Law">Ph.D. (Law)</option>
+                                </optgroup>
+
+                                <optgroup label="Post-Doctoral">
+                                    <option value="PDF_STEM">Post-Doctoral Fellowship (Science & Tech)</option>
+                                    <option value="PDF_Humanities">Post-Doctoral Fellowship (Humanities & Social Sciences)</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div>
+                            <label data-i18n="label_cgpa">CGPA</label>
+                            <input type="number" step="0.1" min="0" max="10" id="cgpa" placeholder="8.5" required>
+                        </div>
+                    </div>
+
+                    <label data-i18n="label_income">Annual Family Income (₹)</label>
+                    <input type="number" min="0" id="annual_income" placeholder="250000" required>
+
+                    <label data-i18n="label_skills">Skills (Comma Separated)</label>
+                    <input type="text" id="skills" placeholder="Python, Java, HTML" required>
+
+                    <button type="submit" id="analyze-btn" class="btn-primary" data-i18n="btn_discover">Discover Opportunities</button>
+                </form>
+            </div>
+            
+            <div class="info-box">
+                <p data-i18n="privacy_note">🔒 Your profile data is stored securely and never shared with third parties.</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div id="empty-state" class="empty-state">
+                <div class="illustration">📄</div>
+                <h3 data-i18n="empty_title">Ready to Match</h3>
+                <p data-i18n="empty_desc">Enter student details on the left to instantly find eligible government scholarships and paid internships.</p>
+            </div>
+
+            <div id="dynamic-results" class="results-panel hidden">
+                </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/i18next@21.6.10/i18next.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
