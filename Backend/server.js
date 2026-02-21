@@ -54,7 +54,27 @@ app.post('/api/evaluate', async (req, res) => {
     }
 });
 
+// This route will show your 10 scholarships in the browser
+app.get('/api/test-scholarships', async (req, res) => {
+    try {
+        const database = client.db("scholarflow");
+        const collection = database.collection("scholarships");
+        
+        // This finds all 10 documents you just imported
+        const allScholarships = await collection.find({}).toArray();
+        
+        res.json({
+            status: "Connected!",
+            count: allScholarships.length,
+            data: allScholarships
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
+
