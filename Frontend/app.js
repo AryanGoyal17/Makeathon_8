@@ -192,33 +192,48 @@ function updateContent() {
 
 // 5. Form Submission Logic
 document.getElementById('evaluation-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('analyze-btn');
-    const originalText = btn.textContent;
-    btn.textContent = "Searching Database...";
-    btn.disabled = true;
+    e.preventDefault();
+    const btn = document.getElementById('analyze-btn');
+    const originalText = btn.textContent;
+    btn.textContent = "Searching Database...";
+    btn.disabled = true;
 
-    const payload = {
-        student_profile: {
-            name: document.getElementById('name').value,
-            gender: document.getElementById('gender').value,
-            category: document.getElementById('category').value,
-            degree: document.getElementById('degree').value,
-            cgpa: parseFloat(document.getElementById('cgpa').value),
-            annual_income: parseInt(document.getElementById('annual_income').value, 10),
-            skills: document.getElementById('skills').value.split(',').map(s => s.trim())
-        }
-    };
+    const payload = {
+        student_profile: {
+            name: document.getElementById('name').value,
+            gender: document.getElementById('gender').value,
+            category: document.getElementById('category').value,
+            degree: document.getElementById('degree').value,
+            cgpa: parseFloat(document.getElementById('cgpa').value),
+            annual_income: parseInt(document.getElementById('annual_income').value, 10),
+            skills: document.getElementById('skills').value.split(',').map(s => s.trim())
+        }
+    };
 
-    // Simulate API Call for Hackathon Frontend Testing
-    await new Promise(r => setTimeout(r, 1200));
+    try {
+        // 1. Send the actual data to your new Node.js backend!
+        const response = await fetch('http://localhost:5000/api/evaluate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-    // Mock Logic
-    const isEligible = payload.student_profile.cgpa >= 8.0;
-    renderResults(isEligible);
-    
-    btn.textContent = originalText;
-    btn.disabled = false;
+        // 2. Wait for the server to reply
+        const serverData = await response.json();
+        console.log("Server says:", serverData); // <-- You will see this in your browser console!
+
+        // 3. Keep our existing UI logic for now
+
+const isEligible = serverData.status === "eligible"; 
+renderResults(isEligible, serverData);
+
+    } catch (error) {
+        console.error("Backend connection failed:", error);
+        alert("Could not connect to the backend server. Is Node running?");
+    }
+    
+    btn.textContent = originalText;
+    btn.disabled = false;
 });
 
 function renderResults(isEligible) {
