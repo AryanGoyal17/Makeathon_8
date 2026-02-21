@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const { MongoClient } = require('mongodb'); // <-- We added this!
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -8,6 +9,21 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors()); 
 app.use(express.json()); 
+
+// --- MONGODB CONNECTION ---
+const uri = process.env.MONGO_URI;
+const client = new MongoClient(uri);
+
+async function connectDB() {
+    try {
+        await client.connect();
+        console.log("🟢 Successfully connected to MongoDB Atlas!");
+    } catch (error) {
+        console.error("🔴 Failed to connect to MongoDB:", error);
+    }
+}
+connectDB(); // Run the connection function
+// --------------------------
 
 // 1. Health Check Route
 app.get('/', (req, res) => {
@@ -17,15 +33,13 @@ app.get('/', (req, res) => {
     });
 });
 
-// 2. The Main Hackathon Endpoint (Dummy Response for now)
+// 2. The Main Hackathon Endpoint (Still Dummy Data for now)
 app.post('/api/evaluate', async (req, res) => {
     try {
         const { student_profile } = req.body;
         
         console.log(`📡 Received request to evaluate profile for: ${student_profile.name}`);
-        console.log(`Academic Details: CGPA ${student_profile.cgpa}, Income: ₹${student_profile.annual_income}`);
 
-        // We will replace this with the MongoDB + MegaLLM logic soon!
         res.json({
             status: "eligible",
             scholarship_name: "Post-Matric Scholarship Scheme",
