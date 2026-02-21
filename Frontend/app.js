@@ -236,35 +236,34 @@ renderResults(isEligible, serverData);
     btn.disabled = false;
 });
 
-function renderResults(isEligible) {
+// 1. Add serverData as a parameter here!
+function renderResults(isEligible, serverData) {
     document.getElementById('empty-state').classList.add('hidden');
     const resultsDiv = document.getElementById('dynamic-results');
     resultsDiv.classList.remove('hidden');
 
     if (isEligible) {
+        // 2. Inject the AI's actual data using ${serverData.propertyName}
         resultsDiv.innerHTML = `
             <div class="status-bar eligible">✓ ${i18next.t('status_eligible')}</div>
-            <h2 style="margin-top:0;">Post-Matric Scholarship Scheme</h2>
+            <h2 style="margin-top:0;">${serverData.scholarship_name}</h2>
+            
             <div class="proof-section">
                 <h4>${i18next.t('proof_header')}</h4>
-                <p class="proof-text">"Based on Section 4.2 of the mandate: Candidates pursuing professional degrees with CGPA > 8.0 and income < ₹3,00,000 are eligible for 100% tuition waiver."</p>
+                <p class="proof-text">"${serverData.eligibility_proof}"</p>
             </div>
-            <p><strong>Funding Amount:</strong> ₹85,000/year</p>
-            <p><strong>${i18next.t('next_steps')}:</strong> Verify Aadhar and institution details on the NSP Portal.</p>
+            
+            <p><strong>Funding Amount:</strong> ${serverData.funding_amount}</p>
+            <p><strong>${i18next.t('next_steps')}:</strong> Verify your documents and apply on the official portal.</p>
         `;
     } else {
+        // Fallback if the AI says they are not eligible for anything
         resultsDiv.innerHTML = `
             <div class="status-bar ineligible">✕ ${i18next.t('status_ineligible')}</div>
-            <p>Your profile does not currently meet the hard constraints for the top state scholarships.</p>
+            <p>Your profile does not currently meet the hard constraints for the top scholarships in our database.</p>
             <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
             <h3 style="color: var(--danger);">${i18next.t('fallback_header')}</h3>
-            <div class="proof-section" style="border-left-color: var(--danger); background: var(--input-bg);">
-                <h4 style="color: var(--danger); margin-bottom: 10px;">Junior Frontend Developer at TechCorp</h4>
-                <p><strong>Match Score:</strong> 82%</p>
-                <p><strong>Gap Analysis:</strong> You possess strong foundational HTML/CSS skills, but the role requires intermediate JavaScript DOM manipulation.</p>
-                <p><strong>Action Plan:</strong> Complete the free 4-hour FreeCodeCamp JS course to bridge this gap.</p>
-            </div>
-            <button class="btn-primary" style="background: var(--danger); margin-top: 10px;">View Internship Details</button>
+            <p>Try exploring alternative private grants or check back next semester when your CGPA updates!</p>
         `;
     }
 }
