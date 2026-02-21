@@ -34,8 +34,8 @@ function showMainApp(userName) {
     mainView.classList.remove('hidden');
     langToggle.classList.remove('hidden');
     logoutBtn.classList.remove('hidden');
-    welcomeMessage.textContent = `Welcome, ${userName}`;
-    document.getElementById('name').value = userName;
+    welcomeMessage.textContent = 'Welcome'; // Just says Welcome now
+    // Deleted the line that auto-filled the name input!
 }
 
 function showAuthScreen() {
