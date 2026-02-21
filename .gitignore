@@ -9,3 +9,7 @@ npm-debug.log*
 
 # Mac OS junk (Always good to have just in case)
 .DS_Store
+
+#Ignoring tempcoderunner
+
+tempCodeRunnerFile.js
