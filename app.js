@@ -18,12 +18,22 @@ function updateThemeIcon(theme) {
     themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
 }
 
-// 2. Define Translation Resources
+// 2. Define Translation Resources (Updated with Gender & Category)
 const resources = {
     en: {
         translation: {
             "profile_header": "Student Profile",
             "label_name": "Full Name",
+            "label_gender": "Gender",
+            "label_category": "Category",
+            "opt_select_gender": "Select Gender",
+            "opt_select_category": "Select Category",
+            "opt_male": "Male",
+            "opt_female": "Female",
+            "opt_general": "General",
+            "opt_obc": "OBC",
+            "opt_sc": "SC",
+            "opt_st": "ST",
             "label_degree": "Degree",
             "label_cgpa": "CGPA",
             "label_income": "Annual Family Income (₹)",
@@ -43,6 +53,16 @@ const resources = {
         translation: {
             "profile_header": "छात्र प्रोफाइल",
             "label_name": "पूरा नाम",
+            "label_gender": "लिंग",
+            "label_category": "श्रेणी",
+            "opt_select_gender": "लिंग चुनें",
+            "opt_select_category": "श्रेणी चुनें",
+            "opt_male": "पुरुष",
+            "opt_female": "महिला",
+            "opt_general": "सामान्य",
+            "opt_obc": "ओबीसी (OBC)",
+            "opt_sc": "एससी (SC)",
+            "opt_st": "एसटी (ST)",
             "label_degree": "डिग्री",
             "label_cgpa": "सीजीपीए (CGPA)",
             "label_income": "वार्षिक पारिवारिक आय (₹)",
@@ -62,6 +82,16 @@ const resources = {
         translation: {
             "profile_header": "ਵਿਦਿਆਰਥੀ ਪ੍ਰੋਫਾਈਲ",
             "label_name": "ਪੂਰਾ ਨਾਮ",
+            "label_gender": "ਲਿੰਗ",
+            "label_category": "ਸ਼੍ਰੇਣੀ",
+            "opt_select_gender": "ਲਿੰਗ ਚੁਣੋ",
+            "opt_select_category": "ਸ਼੍ਰੇਣੀ ਚੁਣੋ",
+            "opt_male": "ਮਰਦ",
+            "opt_female": "ਔਰਤ",
+            "opt_general": "ਜਨਰਲ",
+            "opt_obc": "ਓ.ਬੀ.ਸੀ (OBC)",
+            "opt_sc": "ਐਸ.ਸੀ (SC)",
+            "opt_st": "ਐਸ.ਟੀ (ST)",
             "label_degree": "ਡਿਗਰੀ",
             "label_cgpa": "ਸੀਜੀਪੀਏ (CGPA)",
             "label_income": "ਸਾਲਾਨਾ ਪਰਿਵਾਰਕ ਆਮਦਨ (₹)",
@@ -81,6 +111,16 @@ const resources = {
         translation: {
             "profile_header": "மாணவர் சுயவிவரம்",
             "label_name": "முழு பெயர்",
+            "label_gender": "பாலினம்",
+            "label_category": "பிரிவு",
+            "opt_select_gender": "பாலினத்தைத் தேர்ந்தெடுக்கவும்",
+            "opt_select_category": "பிரிவைத் தேர்ந்தெடுக்கவும்",
+            "opt_male": "ஆண்",
+            "opt_female": "பெண்",
+            "opt_general": "பொது",
+            "opt_obc": "ஓபிசி (OBC)",
+            "opt_sc": "எஸ்சி (SC)",
+            "opt_st": "எஸ்டி (ST)",
             "label_degree": "பட்டம்",
             "label_cgpa": "CGPA",
             "label_income": "ஆண்டு குடும்ப வருமானம் (₹)",
@@ -100,6 +140,16 @@ const resources = {
         translation: {
             "profile_header": "विद्यार्थी प्रोफाइल",
             "label_name": "पूर्ण नाव",
+            "label_gender": "लिंग",
+            "label_category": "वर्ग",
+            "opt_select_gender": "लिंग निवडा",
+            "opt_select_category": "वर्ग निवडा",
+            "opt_male": "पुरुष",
+            "opt_female": "महिला",
+            "opt_general": "खुला (General)",
+            "opt_obc": "ओबीसी (OBC)",
+            "opt_sc": "एससी (SC)",
+            "opt_st": "एसटी (ST)",
             "label_degree": "पदवी",
             "label_cgpa": "CGPA",
             "label_income": "वार्षिक कौटुंबिक उत्पन्न (₹)",
@@ -151,6 +201,8 @@ document.getElementById('evaluation-form').addEventListener('submit', async (e) 
     const payload = {
         student_profile: {
             name: document.getElementById('name').value,
+            gender: document.getElementById('gender').value,
+            category: document.getElementById('category').value,
             degree: document.getElementById('degree').value,
             cgpa: parseFloat(document.getElementById('cgpa').value),
             annual_income: parseInt(document.getElementById('annual_income').value, 10),
