@@ -2,6 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
+const { OpenAI } = require('openai');
+
+// 1. Initialize the MegaLLM client using the OpenAI SDK format
+const megallm = new OpenAI({
+    baseURL: process.env.MEGALLM_BASE_URL, 
+    apiKey: process.env.MEGALLM_API_KEY
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,7 +29,7 @@ async function connectDB() {
         console.error("🔴 Failed to connect to MongoDB:", error);
     }
 }
-connectDB(); // Run the connection function
+connectDB(); 
 // --------------------------
 
 // 1. Health Check Route
@@ -33,7 +40,7 @@ app.get('/', (req, res) => {
     });
 });
 
-// 2. The Main Hackathon Endpoint (AI Powered!)
+// 2. The Main Hackathon Endpoint (SDK Powered with Credit Saver!)
 app.post('/api/evaluate', async (req, res) => {
     try {
         const { student_profile } = req.body;
@@ -43,88 +50,62 @@ app.post('/api/evaluate', async (req, res) => {
         const database = client.db("scholarflow");
         const scholarships = await database.collection("scholarships").find({}).toArray();
 
-        // ---------------------------------------------------------
-        // 🛡️ CREDIT SAVER: "DEV MODE"
-        // Set to true while coding the frontend. Set to false for judges!
-        const DEV_MODE = false; 
-        
-        if (DEV_MODE) {
-            console.log("🛠️ DEV MODE ON: Returning mock data to save MegaLLM API credits.");
-            return res.json({
-                status: "eligible",
-                scholarship_name: "Reliance Foundation Undergraduate Scholarship",
-                eligibility_proof: "MOCK PROOF: Student's CGPA meets the > 7.5 requirement.",
-                funding_amount: "Up to ₹2,00,000"
+        // 🚨 CREDIT SAVER SAFETY CHECK 🚨
+        // This prevents wasting AI credits if the database is empty
+        if (!scholarships || scholarships.length === 0) {
+            console.warn("⚠️ No scholarships found in database. Skipping AI call to save credits.");
+            return res.status(404).json({ 
+                error: "Database Empty", 
+                message: "No scholarships found. Please import data into your MongoDB collection first." 
             });
         }
-        // ---------------------------------------------------------
 
-        // 2. Prepare the "Reasoning" Prompt for MegaLLM
+        // 2. Prepare the "Reasoning" Prompt
         const prompt = `
             You are the ScholarFlow Eligibility Engine. 
             Student Profile: ${JSON.stringify(student_profile)}
-            
             Available Scholarships: ${JSON.stringify(scholarships)}
 
-            Task: Compare the student's CGPA, Income, and details against the 'Rules' for each scholarship. 
-            Return ONLY a valid JSON object (no markdown formatting, no extra text) with these exact keys:
+            Task: Return ONLY a valid JSON object (no markdown) with these exact keys:
             - "status": "eligible" or "not_eligible"
             - "scholarship_name": The name of the best matching scholarship
             - "eligibility_proof": A short explanation of why they qualify based on the rules
             - "funding_amount": The value from the 'Funding' field
         `;
 
-        // 3. Call the MegaLLM API using native fetch
         console.log("🧠 Asking MegaLLM for a decision...");
-        const aiResponse = await fetch("https://ai.megallm.io/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${process.env.MEGALLM_API_KEY}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                model: "gpt-4o-mini", // <-- Updated to a real model name!
-                messages: [{ role: "user", content: prompt }],
-                temperature: 0.1 
-            })
+
+        // 3. Call MegaLLM using gemini-2.5-flash (Safe for Free Tier)
+        const response = await megallm.chat.completions.create({
+            model: "gemini-2.5-flash", 
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.1,
+            response_format: { type: "json_object" } 
         });
 
-        const result = await aiResponse.json();
-        
-        // 🚨 DEBUGGING & SAFETY BLOCK 🚨
-        console.log("🔍 Raw API Response from MegaLLM:", JSON.stringify(result, null, 2));
+        // 🚨 DEBUGGING BLOCK 🚨
+        console.log("🔍 Raw API Response from MegaLLM:", JSON.stringify(response, null, 2));
 
-        if (!result.choices || !result.choices[0]) {
-            console.error("❌ MegaLLM returned an error instead of a choice!");
-            return res.status(400).json({ 
-                error: "API Error", 
-                details: result 
-            });
-        }
-        // 🚨 END DEBUGGING BLOCK 🚨
-        
-        // 4. Clean up the AI's response to ensure it is valid JSON
-        let aiText = result.choices[0].message.content;
-        if (aiText.startsWith("\`\`\`json")) {
-            aiText = aiText.replace(/\`\`\`json/g, "").replace(/\`\`\`/g, "").trim();
-        }
-
+        // 4. Extract and parse the decision
+        const aiText = response.choices[0].message.content;
         const aiDecision = JSON.parse(aiText);
+        
         res.json(aiDecision);
 
     } catch (error) {
         console.error("❌ AI Evaluation failed:", error);
-        res.status(500).json({ error: "The AI is thinking too hard. Check terminal for errors." });
+        res.status(500).json({ 
+            error: "The AI is thinking too hard.",
+            details: error.message 
+        });
     }
 });
 
-// This route will show your 10 scholarships in the browser
+// Test route to view scholarships in browser
 app.get('/api/test-scholarships', async (req, res) => {
     try {
         const database = client.db("scholarflow");
         const collection = database.collection("scholarships");
-        
-        // This finds all 10 documents you just imported
         const allScholarships = await collection.find({}).toArray();
         
         res.json({
@@ -137,7 +118,6 @@ app.get('/api/test-scholarships', async (req, res) => {
     }
 });
 
-// Start the server
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
